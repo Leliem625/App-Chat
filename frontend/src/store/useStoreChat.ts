@@ -139,7 +139,11 @@ export const useStoreChat = create<ChatState>()(
                     console.error(error);
                 }
             },
-            
+            updateConversation: async(conversation) =>{
+                set((state)=>({
+                    conversations:state.conversations.map((c)=> c._id === conversation._id ? {...c,...conversation} : c)
+                }))
+            }
         }),
         {
             name: 'chat-storage',
