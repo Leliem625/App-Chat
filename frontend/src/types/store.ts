@@ -33,11 +33,11 @@ export interface ChatState {
     fetchMessages: (conversationId?: string) => Promise<void>;
     sendMessageDirect: (recipientId: string, content: string, imgUrl?: string) => Promise<void>;
     sendMessageGroup: (conversationId: string, content: string, imgUrl?: string) => Promise<void>;
+    addMessage: (message: Message) => Promise<void>;
 }
 export interface SocketState {
-    
     socket: Socket | null;
-    onlineUsers:string[]
+    onlineUsers: string[];
     connectSocket: () => void;
     disconnectSocket: () => void;
 }

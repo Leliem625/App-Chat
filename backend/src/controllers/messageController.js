@@ -1,6 +1,8 @@
 import Conversation from '../models/Conversation.js';
 import Message from '../models/Message.js';
 import {updateConversationAfterCreateMessage} from '../utils/messageHelper.js';
+import {emitNewMessage} from '../utils/messageHelper.js';
+import {io} from '../socket/index.js';
 class messageController{
     async sendMessage(req,res){
         try{
@@ -40,7 +42,7 @@ class messageController{
             updateConversationAfterCreateMessage(conversation, message, senderId);
 
            await conversation.save();
-           
+           emitNewMessage(io,conversation,message);
            return res.status(200).json({message})
 
         }
@@ -71,7 +73,7 @@ class messageController{
 
             updateConversationAfterCreateMessage(conversation, message, senderId);
             await conversation.save();
-
+            emitNewMessage(io,conversation,message);
             return res.status(200).json({message});
         }
         catch(error){
