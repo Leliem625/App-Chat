@@ -33,8 +33,9 @@ export interface ChatState {
     fetchMessages: (conversationId?: string) => Promise<void>;
     sendMessageDirect: (recipientId: string, content: string, imgUrl?: string) => Promise<void>;
     sendMessageGroup: (conversationId: string, content: string, imgUrl?: string) => Promise<void>;
+    deleteConversation: (conversationId: string) => Promise<void>;
     addMessage: (message: Message) => Promise<void>;
-    updateConversation: (conversation: Conversation) => Promise<void>,
+    updateConversation: (conversation: Conversation) => Promise<void>;
 }
 export interface SocketState {
     socket: Socket | null;

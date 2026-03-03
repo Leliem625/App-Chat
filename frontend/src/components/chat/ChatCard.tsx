@@ -1,6 +1,8 @@
+import { useState } from 'react';
 import { cn, formatOnlineTime } from '../../lib/utils';
 import { Card } from '../ui/card';
-import { MoreHorizontal } from 'lucide-react';
+import { MoreHorizontal, Trash2 } from 'lucide-react';
+import { useStoreChat } from '@/store/useStoreChat';
 
 interface ChatCardProps {
     convoId: string;
@@ -22,6 +24,12 @@ const ChatCard = ({
     leftSection,
     subtitle,
 }: ChatCardProps) => {
+    const [showDelete, setShowDelete] = useState(false);
+    // const [id, setId] = useState<string | null>(null);
+    const { deleteConversation } = useStoreChat();
+    const handleDeleteConversation = async (id: string) => {
+        await deleteConversation(id);
+    };
     return (
         <Card
             key={convoId}
@@ -51,7 +59,21 @@ const ChatCard = ({
 
                     <div className="flex items-center justify-between">
                         <div className="flex items-center gap-1 flex-1 min-w-0">{subtitle}</div>
-                        <MoreHorizontal className="size-4 text-muted-foreground opacity-0 group-hover:opacity-100 hover:size-5 transition-smooth" />
+                        <div className="group">
+                            <MoreHorizontal
+                                className="size-4 text-muted-foreground opacity-0 group-hover:opacity-100 hover:size-5 transition-smooth"
+                                onClick={() => setShowDelete((prev) => !prev)}
+                            />
+                            {showDelete && (
+                                <Trash2
+                                    className="size-4 text-red-500 cursor-pointer hover:size-5 transition-all"
+                                    onClick={(e) => {
+                                        e.stopPropagation();
+                                        handleDeleteConversation(convoId);
+                                    }}
+                                />
+                            )}
+                        </div>
                     </div>
                 </div>
             </div>

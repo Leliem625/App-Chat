@@ -23,7 +23,6 @@ const MessageItem = ({ message, index, messages, selectConvo, lastMessageStatus 
 
     const participant = selectConvo.participants.find((p) => p._id.toString() === message.senderId.toString());
 
-    console.log(selectConvo.lastMessage?._id);
     return (
         <div className={cn('flex gap-2 message-bounce', message.isOwn ? 'justify-end' : 'justify-start')}>
             {/* Avatar */}
@@ -60,7 +59,7 @@ const MessageItem = ({ message, index, messages, selectConvo, lastMessageStatus 
                     <p className="text-sm leading-relaxed wrap-break-word">{message.content}</p>
                 </Card>
 
-                {message.isOwn && message._id === selectConvo.lastMessage?._id && activeId === message._id &&(
+                {message.isOwn && message._id === selectConvo.lastMessage?._id && activeId === message._id && (
                     <Badge
                         className={cn(
                             'text-xs px-1.5 h-3 border-0',

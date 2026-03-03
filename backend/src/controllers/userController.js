@@ -10,8 +10,14 @@ export const authMe = async (req, res) => {
     return res.status(500).json({ message: "Lỗi hệ thống" });
   }
 };
-export const Test = async(req,res)=>{
- 
-    return res.sendStatus(204);
-  
-}
+// export const searchUserByUserName = async(req,res) =>{
+//   try{
+//     const {userName} = req.query;
+//     if(!userName || userName.trim() === ""){
+//       return res.
+//     }
+//   }
+//   catch(error){
+
+//   }
+// }

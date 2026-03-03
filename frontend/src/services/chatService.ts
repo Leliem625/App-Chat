@@ -20,6 +20,10 @@ export const chatService = {
         
         return res.data.message;
     },
+    async deleteConversation(conversationId: string){
+        const res = await api.delete(`/conversations/${conversationId}/delete`);
+        return res.data;
+    },
     async sendMessageGroup(conversationId: string, content: string, imgUrl?: string) {
         const res = await api.post('/message/sendgroup', { conversationId, content, imgUrl });
         return res.data.message;

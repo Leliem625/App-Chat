@@ -79,7 +79,6 @@ export const useStoreChat = create<ChatState>()(
             sendMessageDirect: async (recipientId, content, imgUrl) => {
                 try {
                     const { activeConversationId } = get();
-                    console.log(activeConversationId);
 
                     await chatService.sendMessageDirect(
                         recipientId,
@@ -87,11 +86,19 @@ export const useStoreChat = create<ChatState>()(
                         activeConversationId || undefined,
                         imgUrl!,
                     );
-                    set((state) => ({
-                        conversations: state.conversations.map((c) =>
+                    set((state) => {
+                        const updated = state.conversations.map((c) =>
                             c._id === activeConversationId ? { ...c, seenBy: [] } : c,
-                        ),
-                    }));
+                        );
+
+                        const index = updated.findIndex((c) => c._id === activeConversationId);
+                        if (index === -1) return state;
+
+                        const convo = updated[index];
+                        const newList = [convo, ...updated.filter((c) => c._id !== activeConversationId)];
+
+                        return { conversations: newList };
+                    });
                 } catch (error) {
                     console.error('Lỗi khi gửi tin nhắn!', error);
                 }
@@ -99,13 +106,28 @@ export const useStoreChat = create<ChatState>()(
             sendMessageGroup: async (conversationId, content, imgUrl) => {
                 try {
                     await chatService.sendMessageGroup(conversationId, content, imgUrl!);
-                    set((state) => ({
-                        conversations: state.conversations.map((c) =>
+                    set((state) => {
+                        const updated = state.conversations.map((c) =>
                             c._id === get().activeConversationId ? { ...c, seenBy: [] } : c,
-                        ),
-                    }));
+                        );
+                        const index = updated.findIndex((p) => p._id === get().activeConversationId);
+                        if (index === -1) return state;
+
+                        const convo = updated[index];
+                        const listConvo = [convo, ...updated.filter((p) => p._id !== get().activeConversationId)];
+                        return { conversations: listConvo };
+                    });
                 } catch (error) {
                     console.error('Loi khi gui tin nhan', error);
+                }
+            },
+            deleteConversation: async (conversationId) => {
+                try {
+                    await chatService.deleteConversation(conversationId);
+                    const { conversations } = await chatService.fetchConversations();
+                    set({ conversations, loading: false });
+                } catch (error) {
+                    console.error('Lỗi khi xóa cuộc trò chuyện!', error);
                 }
             },
             addMessage: async (message) => {
@@ -139,11 +161,13 @@ export const useStoreChat = create<ChatState>()(
                     console.error(error);
                 }
             },
-            updateConversation: async(conversation) =>{
-                set((state)=>({
-                    conversations:state.conversations.map((c)=> c._id === conversation._id ? {...c,...conversation} : c)
-                }))
-            }
+            updateConversation: async (conversation) => {
+                set((state) => ({
+                    conversations: state.conversations.map((c) =>
+                        c._id === conversation._id ? { ...c, ...conversation } : c,
+                    ),
+                }));
+            },
         }),
         {
             name: 'chat-storage',

@@ -169,6 +169,27 @@ class ConversationController {
             return [];
         }
     }
-    
+    async deleteConversation(req,res){
+        try{
+            const {conversationId} = req.params;
+
+            if(!conversationId) {
+                return res.status(400).json({message: "Thiếu thông tin cuộc trò chuyện"})
+            }
+            const findConversation = await Conversation.findById(conversationId);
+
+            if(!findConversation){
+                return res.status(401).json({message:"Cuộc trò chuyện không tồn tại!"})
+            }
+
+            await findConversation.deleteOne();
+            return res.status(200).json({message:'Xóa cuộc trò chuyện thành công!'})
+
+        }
+        catch(error){
+            console.error("Lỗi khi xóa cuộc trò chuyện!", error);
+            return res.status(500).json({message:"Lỗi hệ thống!"})
+        }
+    }
 }
 export default new ConversationController();

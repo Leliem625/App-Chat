@@ -1,6 +1,6 @@
 import * as React from 'react';
 // import { Command } from 'lucide-react';
-
+import AddFriendModal from '../chat/AddFriendModal';
 import {
     Sidebar,
     SidebarContent,
@@ -35,7 +35,7 @@ export function AppSidebar({ ...props }: React.ComponentProps<typeof Sidebar>) {
                 <SidebarGroup>
                     <SidebarGroupLabel className="uppercase">bạn bè</SidebarGroupLabel>
                     <SidebarGroupAction title="Kết Bạn" className="cursor-pointer">
-                        {/* <AddFriendModal /> */}
+                        <AddFriendModal />
                     </SidebarGroupAction>
 
                     <SidebarGroupContent>

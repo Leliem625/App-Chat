@@ -6,4 +6,5 @@ const router = express.Router();
 router.post("/",checkFriend, ConversationController.createConversation);
 router.get("/", ConversationController.getConversation);
 router.get("/:conversationId/messages", ConversationController.getMessage);
+router.delete("/:conversationId/delete", ConversationController.deleteConversation);
 export default router;
